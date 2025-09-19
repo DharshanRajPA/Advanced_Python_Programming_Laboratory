@@ -1,0 +1,8 @@
+PatientID,Name,Age,Gender,Diagnosis,BloodPressure,HeartRate
+P001,Arjun Mehra,45,Male,Hypertension,140/90,80
+P002,Meera Joshi,38,Female,Diabetes,130/85,76
+P003,Rahul Desai,50,Male,Cardiovascular Disease,150/95,85
+P004,Nandini Iyer,29,Female,Asthma,120/80,72
+P005,Viraj Kapoor,60,Male,Arthritis,135/88,78
+P006,Leena Patel,55,Female,Diabetes,128/85,79
+P007,Rohan Singh,42,Male,Hypertension,145/92,82
