@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Restaurants - Admin{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="page-title">Manage Restaurants</h1>
+    
+    <div class="admin-actions">
+        <a href="{{ url_for('admin_add_restaurant') }}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Add Restaurant
+        </a>
+    </div>
+    
+    <div class="restaurants-admin-list">
+        {% for restaurant in restaurants %}
+        <div class="restaurant-admin-card">
+            <img src="{{ restaurant.image_url or 'https://via.placeholder.com/200x150?text=Restaurant' }}" alt="{{ restaurant.name }}">
+            <div class="restaurant-admin-info">
+                <h3>{{ restaurant.name }}</h3>
+                <p>{{ restaurant.description or 'No description' }}</p>
+                <p><strong>Status:</strong> 
+                    <span class="status-{{ 'active' if restaurant.is_active else 'inactive' }}">
+                        {{ 'Active' if restaurant.is_active else 'Inactive' }}
+                    </span>
+                </p>
+            </div>
+            <div class="restaurant-admin-actions">
+                <a href="{{ url_for('admin_restaurant_menu', restaurant_id=restaurant.id) }}" class="btn btn-primary">
+                    Manage Menu
+                </a>
+            </div>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <p>No restaurants found. <a href="{{ url_for('admin_add_restaurant') }}">Add one now</a></p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+

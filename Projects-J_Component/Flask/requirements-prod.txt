@@ -1,0 +1,14 @@
+# Production requirements (includes PostgreSQL, Redis, Gunicorn)
+-r requirements.txt
+
+# PostgreSQL adapter (for production database)
+# Note: If installation fails on Windows, you may need to install PostgreSQL client libraries
+# or use a pre-built wheel: pip install psycopg2-binary --only-binary :all:
+psycopg2-binary>=2.9.9
+
+# Redis for caching/sessions (optional)
+redis>=5.0.1
+
+# Gunicorn WSGI server (for production deployment)
+gunicorn>=21.2.0
+

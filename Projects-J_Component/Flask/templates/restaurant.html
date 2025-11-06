@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}{{ restaurant.name }} - Food Order App{% endblock %}
+
+{% block content %}
+<div class="restaurant-header">
+    <div class="container">
+        <div class="restaurant-header-content">
+            <img src="{{ restaurant.image_url or 'https://via.placeholder.com/400x300?text=Restaurant' }}" alt="{{ restaurant.name }}" class="restaurant-header-image">
+            <div class="restaurant-header-info">
+                <h1>{{ restaurant.name }}</h1>
+                <p>{{ restaurant.description or 'Delicious food awaits!' }}</p>
+                {% if restaurant.address %}
+                <p><i class="fas fa-map-marker-alt"></i> {{ restaurant.address }}</p>
+                {% endif %}
+                {% if restaurant.phone %}
+                <p><i class="fas fa-phone"></i> {{ restaurant.phone }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    {% if categories %}
+    <div class="category-filter">
+        <button class="category-btn active" data-category="all">All</button>
+        {% for category in categories %}
+        <button class="category-btn" data-category="{{ category }}">{{ category }}</button>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="menu-grid">
+        {% for item in menu_items %}
+        <div class="menu-item-card" data-category="{{ item.category or 'uncategorized' }}">
+            <div class="menu-item-image">
+                <img src="{{ item.image_url or 'https://via.placeholder.com/300x200?text=Food' }}" alt="{{ item.name }}">
+            </div>
+            <div class="menu-item-info">
+                <h3>{{ item.name }}</h3>
+                <p>{{ item.description or 'Delicious food item' }}</p>
+                <div class="menu-item-footer">
+                    <span class="price">${{ "%.2f"|format(item.price) }}</span>
+                    {% if current_user.is_authenticated %}
+                    <form method="POST" action="{{ url_for('add_to_cart', item_id=item.id) }}" style="display: inline;">
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </form>
+                    {% else %}
+                    <a href="{{ url_for('login') }}" class="btn btn-primary btn-sm">Login to Order</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-utensils"></i>
+            <p>No menu items available.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            const category = this.dataset.category;
+            document.querySelectorAll('.menu-item-card').forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
+

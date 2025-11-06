@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Menu - {{ restaurant.name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="page-title">Menu - {{ restaurant.name }}</h1>
+    
+    <div class="admin-actions">
+        <a href="{{ url_for('admin_add_menu_item') }}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Add Menu Item
+        </a>
+        <a href="{{ url_for('admin_restaurants') }}" class="btn btn-secondary">Back to Restaurants</a>
+    </div>
+    
+    <div class="menu-admin-list">
+        {% for item in menu_items %}
+        <div class="menu-item-admin-card">
+            <img src="{{ item.image_url or 'https://via.placeholder.com/150x100?text=Food' }}" alt="{{ item.name }}">
+            <div class="menu-item-admin-info">
+                <h3>{{ item.name }}</h3>
+                <p>{{ item.description or 'No description' }}</p>
+                <p><strong>Price:</strong> ${{ "%.2f"|format(item.price) }}</p>
+                <p><strong>Category:</strong> {{ item.category or 'Uncategorized' }}</p>
+                <p><strong>Status:</strong> 
+                    <span class="status-{{ 'available' if item.is_available else 'unavailable' }}">
+                        {{ 'Available' if item.is_available else 'Unavailable' }}
+                    </span>
+                </p>
+            </div>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <p>No menu items found. <a href="{{ url_for('admin_add_menu_item') }}">Add one now</a></p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+

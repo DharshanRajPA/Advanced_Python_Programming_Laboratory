@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Food Order App{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="page-title">Admin Dashboard</h1>
+    
+    <div class="admin-nav">
+        <a href="{{ url_for('admin_restaurants') }}" class="btn btn-primary">Manage Restaurants</a>
+        <a href="{{ url_for('admin_orders') }}" class="btn btn-primary">Manage Orders</a>
+        <a href="{{ url_for('admin_add_restaurant') }}" class="btn btn-success">Add Restaurant</a>
+        <a href="{{ url_for('admin_add_menu_item') }}" class="btn btn-success">Add Menu Item</a>
+    </div>
+    
+    <div class="admin-stats">
+        <div class="stat-card">
+            <h3>{{ restaurants|length }}</h3>
+            <p>Restaurants</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ orders|length }}</h3>
+            <p>Recent Orders</p>
+        </div>
+    </div>
+    
+    <div class="recent-orders">
+        <h2>Recent Orders</h2>
+        {% if orders %}
+        <div class="orders-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>User</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>#{{ order.id }}</td>
+                        <td>{{ order.user.username }}</td>
+                        <td>${{ "%.2f"|format(order.total_amount + 2.99) }}</td>
+                        <td><span class="order-status status-{{ order.status }}">{{ order.status|replace('_', ' ')|title }}</span></td>
+                        <td>{{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td><a href="{{ url_for('order_detail', order_id=order.id) }}" class="btn btn-sm">View</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p>No orders yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

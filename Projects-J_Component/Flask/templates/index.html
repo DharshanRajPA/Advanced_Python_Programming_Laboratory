@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Food Order App{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <h1>Welcome to FoodOrder</h1>
+        <p>Order delicious food from your favorite restaurants</p>
+    </div>
+</div>
+
+<div class="container">
+    <h2 class="section-title">Featured Restaurants</h2>
+    <div class="restaurant-grid">
+        {% for restaurant in restaurants %}
+        <div class="restaurant-card">
+            <div class="restaurant-image">
+                <img src="{{ restaurant.image_url or 'https://via.placeholder.com/400x300?text=Restaurant' }}" alt="{{ restaurant.name }}">
+            </div>
+            <div class="restaurant-info">
+                <h3>{{ restaurant.name }}</h3>
+                <p>{{ restaurant.description or 'Delicious food awaits!' }}</p>
+                <div class="restaurant-meta">
+                    {% if restaurant.address %}
+                    <p><i class="fas fa-map-marker-alt"></i> {{ restaurant.address }}</p>
+                    {% endif %}
+                    {% if restaurant.phone %}
+                    <p><i class="fas fa-phone"></i> {{ restaurant.phone }}</p>
+                    {% endif %}
+                </div>
+                <a href="{{ url_for('restaurant_detail', restaurant_id=restaurant.id) }}" class="btn btn-primary">
+                    View Menu <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-utensils"></i>
+            <p>No restaurants available at the moment.</p>
+            {% if current_user.is_admin %}
+            <a href="{{ url_for('admin_add_restaurant') }}" class="btn btn-primary">Add Restaurant</a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+

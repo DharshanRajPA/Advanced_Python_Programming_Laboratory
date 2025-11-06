@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - Food Order App{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="page-title">Checkout</h1>
+    
+    <div class="checkout-container">
+        <div class="checkout-form-section">
+            <h2>Delivery Information</h2>
+            <form method="POST" action="{{ url_for('checkout') }}">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.delivery_address.label(class="form-label") }}
+                    {{ form.delivery_address(class="form-control", placeholder="Enter your delivery address") }}
+                    {% if form.delivery_address.errors %}
+                        <div class="error-message">{{ form.delivery_address.errors[0] }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.phone.label(class="form-label") }}
+                    {{ form.phone(class="form-control", placeholder="Enter your phone number") }}
+                    {% if form.phone.errors %}
+                        <div class="error-message">{{ form.phone.errors[0] }}</div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Place Order</button>
+            </form>
+        </div>
+        
+        <div class="checkout-summary">
+            <h2>Order Summary</h2>
+            <div class="order-items">
+                {% for item in cart_items %}
+                <div class="order-item">
+                    <span>{{ item.menu_item.name }} x {{ item.quantity }}</span>
+                    <span>${{ "%.2f"|format(item.menu_item.price * item.quantity) }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="summary-row">
+                <span>Subtotal:</span>
+                <span>${{ "%.2f"|format(total) }}</span>
+            </div>
+            <div class="summary-row">
+                <span>Delivery Fee:</span>
+                <span>$2.99</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total:</span>
+                <span>${{ "%.2f"|format(total + 2.99) }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
